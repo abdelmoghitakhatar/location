@@ -7,8 +7,10 @@ import com.app.location.service.mapper.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserServiceImpl implements UserService {
 
     private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO getInformation() {
-        log.debug("\n-----------\n-----------\n-----------\nthe id : {} \n-----------\n-----------\n-----------\n", userRepository.findAll().get(0).getId());
+        log.debug("\n-----------\nthe id : {}\n-----------\n", userRepository.findAll().get(0).getId());
         return userMapper.toDto(userRepository.findAll().get(0));
     }
 }

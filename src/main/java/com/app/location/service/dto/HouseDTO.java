@@ -1,7 +1,9 @@
-package com.app.location.domain;
+package com.app.location.service.dto;
 
+import com.app.location.domain.DocumentDomain;
+import com.app.location.domain.UserDomain;
 import com.app.location.domain.enumeration.City;
-import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,59 +14,43 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "house")
-public class HouseDomain  implements Serializable {
+public class HouseDTO implements Serializable {
 
-     @Serial
-     private static final long serialVersionUID = 4266317452836949637L;
+    @Serial
+    private static final long serialVersionUID = -4234821468358188898L;
 
-     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-     private Long id;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private Long id;
 
-     @NotNull
-     @Column(nullable = false)
-     private LocalDate createdDate;
+    @NotNull
+    private LocalDate createdDate;
 
-     @NotNull
-     @Column(unique = true, nullable = false)
-     private String localisation;
+    @NotNull
+    private String localisation;
 
-     @NotNull
-     @Enumerated(EnumType.STRING)
-     @Column(nullable = false)
-     private City city;
+    @NotNull
+    private City city;
 
-     @NotNull
-     @Column(nullable = false)
-     private String address;
+    @NotNull
+    private String address;
 
-     @NotNull
-     @Min(0)
-     @Column(nullable = false)
-     private double price;
+    @NotNull
+    @Min(0)
+    private double price;
 
-     @NotNull
-     @Size(min = 50, max = 2000)
-     @Column(nullable = false)
-     private String description;
+    @NotNull
+    @Size(min = 50, max = 2000)
+    private String description;
 
-     @NotNull
-     @Column(nullable = false)
-     private boolean available = true;
+    @NotNull
+    private boolean available = true;
 
-     @ManyToOne
-     private UserDomain user;
+    private UserDTO user;
 
-     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "house", fetch = FetchType.LAZY)
-     private Set<DocumentDomain> documents = new HashSet<>();
+    private Set<DocumentDTO> documents = new HashSet<>();
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public LocalDate getCreatedDate() {
@@ -73,6 +59,10 @@ public class HouseDomain  implements Serializable {
 
     public void setCreatedDate(LocalDate createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getLocalisation() {
@@ -123,22 +113,19 @@ public class HouseDomain  implements Serializable {
         this.available = available;
     }
 
-    public UserDomain getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(UserDomain user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public Set<DocumentDomain> getDocuments() {
+    public Set<DocumentDTO> getDocuments() {
         return documents;
     }
 
-    public void setDocuments(Set<DocumentDomain> documents) {
-        if(documents != null){
-            documents.forEach(i -> i.setHouse(this));
-        }
+    public void setDocuments(Set<DocumentDTO> documents) {
         this.documents = documents;
     }
 }

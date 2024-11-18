@@ -1,6 +1,7 @@
 package com.app.location.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.app.location.domain.HouseDomain;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -9,13 +10,15 @@ import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 8051133884476414164L;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Long id;
 
     @NotNull
@@ -39,16 +42,19 @@ public class UserDTO implements Serializable {
     private String tel;
 
     @NotNull
-    private Boolean confirmation = false;
+    private boolean confirmed = false;
 
     @NotNull
     private LocalDate birthDay;
 
     @NotNull
     @Size(min = 8)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     private String address;
+
+    private Set<HouseDTO> houses = new HashSet<>() ;
 
     public Long getId() {
         return id;
@@ -98,12 +104,12 @@ public class UserDTO implements Serializable {
         this.tel = tel;
     }
 
-    public Boolean getConfirmation() {
-        return confirmation;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
-    public void setConfirmation(Boolean confirmation) {
-        this.confirmation = confirmation;
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public LocalDate getBirthDay() {
@@ -128,5 +134,13 @@ public class UserDTO implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Set<HouseDTO> getHouses() {
+        return houses;
+    }
+
+    public void setHouses(Set<HouseDTO> houses) {
+        this.houses = houses;
     }
 }

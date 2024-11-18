@@ -9,8 +9,11 @@ import jakarta.validation.constraints.Size;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
+@Table(name = "user")
 public class UserDomain implements Serializable {
 
     @Serial
@@ -46,7 +49,7 @@ public class UserDomain implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-    private Boolean confirmation = false;
+    private boolean confirmed = false;
 
     @NotNull
     @Column(nullable = false)
@@ -58,6 +61,9 @@ public class UserDomain implements Serializable {
     private String password;
 
     private String address;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "user", fetch = FetchType.LAZY)
+    private Set<HouseDomain> houses = new HashSet<>() ;
 
     public Long getId() {
         return id;
@@ -107,12 +113,12 @@ public class UserDomain implements Serializable {
         this.tel = tel;
     }
 
-    public Boolean getConfirmation() {
-        return confirmation;
+    public boolean isConfirmed() {
+        return confirmed;
     }
 
-    public void setConfirmation(Boolean confirmation) {
-        this.confirmation = confirmation;
+    public void setConfirmed(boolean confirmed) {
+        this.confirmed = confirmed;
     }
 
     public LocalDate getBirthDay() {
@@ -137,5 +143,16 @@ public class UserDomain implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Set<HouseDomain> getHouses() {
+        return houses;
+    }
+
+    public void setHouses(Set<HouseDomain> houses) {
+        if (houses != null) {
+            houses.forEach(i -> i.setUser(this));
+        }
+        this.houses = houses;
     }
 }
